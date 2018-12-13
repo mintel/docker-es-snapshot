@@ -15,3 +15,4 @@ Optional environment variables:
 ## TODO
 * Add support for non-bucket-based snapshots
 * Maybe make some values optional, with sensible defaults?
+* Error out if required env vars not specified
