@@ -10,7 +10,7 @@ You need to provide the following environment variables:
 * `SNAPSHOT_PATH`: the path that you want your snapshots to live within your repository
 
 Optional environment variables:
-* `SNAPSHOT_RETENTION`: the number of past snapshots you want to keep (any previous snapshots will be deleted)
+* `SNAPSHOT_RETENTION`: the number of past snapshots you want to keep (if this is set, previous snapshots will be deleted)
 
 ## TODO
 * Add support for non-bucket-based snapshots
