@@ -8,10 +8,11 @@ You need to provide the following environment variables:
 * `REPOSITORY_TYPE`: the type of your respository (at the moment, only bucket-based repositories are supported, i.e. S3 and GCS. See TODOs)
 * `BUCKET_NAME_FILE_PATH`: the path to the file in which your bucket name can be found
 * `BACKUP_PATH`: the path that you want your snapshots to live within your repository
-* `SNAPSHOT_RETENTION`: the number of past snapshots you want to keep (it will delete any snapshots taken before the most recent x snapshots taken)
+
+Optional environment variables:
+* `SNAPSHOT_RETENTION`: the number of past snapshots you want to keep (any previous snapshots will be deleted)
 
 ## TODO
 * Make more flexible, i.e. add support for non-bucket-based snapshots
 * Maybe make some values optional, with sensible defaults?
-* Make retention optional (i.e. allow infinite snapshots)
 * Support bucket name in environment rather than forcing the use of a file
