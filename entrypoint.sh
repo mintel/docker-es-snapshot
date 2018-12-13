@@ -5,6 +5,11 @@ set -e
 # Remove trailing slash from URL if it has one
 CLUSTER_URL=$(echo $CLUSTER_URL | sed "s/\/$//")
 
+# Set bucket name from file if file path is provided
+if [[ ! -z "${BUCKET_NAME_FILE_PATH}" ]]; then
+    BUCKET_NAME=$(cat $BUCKET_NAME_FILE_PATH)
+fi
+
 echo "Reloading secure settings"
 curl -s -X POST ${CLUSTER_URL}/_nodes/reload_secure_settings?pretty
 
@@ -14,7 +19,7 @@ curl -s -X PUT ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}?pretty -H "Content-Ty
 {
     "type": "'${REPOSITORY_TYPE}'",
     "settings": {
-        "bucket": "'$(cat ${BUCKET_NAME_FILE_PATH})'",
+        "bucket": "'$BUCKET_NAME'",
         "base_path": "'${BACKUP_PATH}'"
     }
 }'
