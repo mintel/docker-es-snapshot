@@ -13,6 +13,6 @@ Optional environment variables:
 * `SNAPSHOT_RETENTION`: the number of past snapshots you want to keep (any previous snapshots will be deleted)
 
 ## TODO
-* Make more flexible, i.e. add support for non-bucket-based snapshots
+* Add support for non-bucket-based snapshots
 * Maybe make some values optional, with sensible defaults?
 * Support bucket name in environment rather than forcing the use of a file
