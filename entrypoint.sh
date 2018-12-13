@@ -20,12 +20,12 @@ curl -s -X PUT ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}?pretty -H "Content-Ty
     "type": "'${REPOSITORY_TYPE}'",
     "settings": {
         "bucket": "'$BUCKET_NAME'",
-        "base_path": "'${BACKUP_PATH}'"
+        "base_path": "'${SNAPSHOT_PATH}'"
     }
 }'
 
 echo
-echo "Starting backup"
+echo "Starting snapshot"
 DATE=$(date +%Y.%m.%d-%H.%M.%S)
 curl -s -X PUT "${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}/${DATE}?wait_for_completion=true&pretty"
 
