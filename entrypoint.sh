@@ -19,7 +19,7 @@ curl -s -X PUT ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}?pretty -H "Content-Ty
 {
     "type": "'${REPOSITORY_TYPE}'",
     "settings": {
-        "bucket": "'$BUCKET_NAME'",
+        "bucket": "'${BUCKET_NAME}'",
         "base_path": "'${SNAPSHOT_PATH}'"
     }
 }'
