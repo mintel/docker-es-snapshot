@@ -24,6 +24,8 @@ curl -s -X PUT ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}?pretty -H "Content-Ty
     }
 }'
 
+echo
+echo "Creating snapshot"
 curator --config /etc/config/config.yml /etc/config/snapshot.yml
 
 if [[ ! -z "${SNAPSHOT_RETENTION}" ]]; then
