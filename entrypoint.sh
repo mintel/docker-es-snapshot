@@ -24,22 +24,12 @@ curl -s -X PUT ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}?pretty -H "Content-Ty
     }
 }'
 
-echo
-echo "Starting snapshot"
-DATE=$(date +%Y.%m.%d-%H.%M.%S)
-curl -s -X PUT "${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}/${DATE}?wait_for_completion=true&pretty"
+curator --config /etc/config/config.yml /etc/config/snapshot.yml
 
 if [[ ! -z "${SNAPSHOT_RETENTION}" ]]; then
-    echo
-    echo "Finding snapshots older than the retention threshold (${SNAPSHOT_RETENTION})"
-    SNAPSHOTS_TO_DELETE=$(curl -s ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}/_all | jq -r ".snapshots[:-${SNAPSHOT_RETENTION}][].snapshot")
-    
-    if [[ ! -z "${SNAPSHOTS_TO_DELETE}" ]]; then
-        for snapshot in ${SNAPSHOTS_TO_DELETE}; do
-            echo "Deleting snapshot ${snapshot}"
-            curl -s -X DELETE ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}/${snapshot}?pretty
-        done
-    fi
+  echo
+  echo "Deleting old snapshot(s)"
+  curator --config /etc/config/config.yml /etc/config/retention.yml
 fi
 
 echo
