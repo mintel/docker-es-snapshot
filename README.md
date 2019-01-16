@@ -3,7 +3,7 @@ Docker container to trigger and cleanup ElasticSearch snapshots using the Elasti
 
 ## Usage
 This image uses the following config files which need to be mounted in `/etc/config`:
-* `snapshot.yml`: the [actionfile](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/actionfile.html) used to [create snapshots](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/snapshot.html)
+* `actions.yml`: the [actionfile](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/actionfile.html) used to [create](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/snapshot.html) or [restore](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/restore.html) your snapshot
 * `config.yml`: the curator's ElasticSearch [client config](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/configfile.html)
 * `retention.yml`: (optional) - the action file used to [delete old snapshots](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/delete_snapshots.html)
 
