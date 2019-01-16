@@ -1,5 +1,5 @@
 # ElasticSearch snapshot container
-Docker container to trigger and cleanup ElasticSearch snapshots using the Elastic Curator, curl and jq.
+Docker container to trigger and cleanup ElasticSearch snapshots using the Elastic Curator and curl.
 
 ## Usage
 This image uses the following config files which need to be mounted in `/etc/config`:
