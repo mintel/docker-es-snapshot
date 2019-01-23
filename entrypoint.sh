@@ -10,6 +10,10 @@ if [[ ! -z "${BUCKET_NAME_FILE_PATH}" ]]; then
     BUCKET_NAME=$(cat $BUCKET_NAME_FILE_PATH)
 fi
 
+RESTORE_BYTES_PER_SEC=${RESTORE_BYTES_PER_SEC:-40mb}
+SNAPSHOT_BYTES_PER_SEC=${SNAPSHOT_BYTES_PER_SEC:-40mb}
+READONLY=${READONLY:-false}
+
 echo "Reloading secure settings"
 curl -s -X POST ${CLUSTER_URL}/_nodes/reload_secure_settings?pretty
 
@@ -20,7 +24,10 @@ curl -s -X PUT ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}?pretty -H "Content-Ty
     "type": "'${REPOSITORY_TYPE}'",
     "settings": {
         "bucket": "'${BUCKET_NAME}'",
-        "base_path": "'${SNAPSHOT_PATH}'"
+        "base_path": "'${SNAPSHOT_PATH}'",
+        "max_restore_bytes_per_sec": "'${RESTORE_BYTES_PER_SEC}'",
+        "max_snapshot_bytes_per_sec": "'${SNAPSHOT_BYTES_PER_SEC}'",
+        "readonly": '${READONLY}'
     }
 }'
 
