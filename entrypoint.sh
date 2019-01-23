@@ -7,8 +7,12 @@ CLUSTER_URL=$(echo $CLUSTER_URL | sed "s/\/$//")
 
 # Set bucket name from file if file path is provided
 if [[ ! -z "${BUCKET_NAME_FILE_PATH}" ]]; then
-    BUCKET_NAME=$(cat $BUCKET_NAME_FILE_PATH)
+  BUCKET_NAME=$(cat $BUCKET_NAME_FILE_PATH)
 fi
+
+MAX_RESTORE_BYTES_PER_SEC=${MAX_RESTORE_BYTES_PER_SEC:-40mb}
+MAX_SNAPSHOT_BYTES_PER_SEC=${MAX_SNAPSHOT_BYTES_PER_SEC:-40mb}
+READONLY=${READONLY:-false}
 
 echo "Reloading secure settings"
 curl -s -X POST ${CLUSTER_URL}/_nodes/reload_secure_settings?pretty
@@ -17,29 +21,26 @@ echo
 echo "Creating snapshot repository"
 curl -s -X PUT ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}?pretty -H "Content-Type: application/json" -d'
 {
-    "type": "'${REPOSITORY_TYPE}'",
-    "settings": {
-        "bucket": "'${BUCKET_NAME}'",
-        "base_path": "'${SNAPSHOT_PATH}'"
-    }
+  "type": "'${REPOSITORY_TYPE}'",
+  "settings": {
+    "bucket": "'${BUCKET_NAME}'",
+    "base_path": "'${SNAPSHOT_PATH}'",
+    "max_restore_bytes_per_sec": "'${MAX_RESTORE_BYTES_PER_SEC}'",
+    "max_snapshot_bytes_per_sec": "'${MAX_SNAPSHOT_BYTES_PER_SEC}'",
+    "readonly": '${READONLY}'
+  }
 }'
 
-echo
-echo "Starting snapshot"
-DATE=$(date +%Y.%m.%d-%H.%M.%S)
-curl -s -X PUT "${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}/${DATE}?wait_for_completion=true&pretty"
+if [[ -z "${SKIP_ACTIONS}" ]]; then
+  echo
+  echo "Running actions"
+  curator --config /etc/config/config.yml /etc/config/actions.yml
+fi
 
 if [[ ! -z "${SNAPSHOT_RETENTION}" ]]; then
-    echo
-    echo "Finding snapshots older than the retention threshold (${SNAPSHOT_RETENTION})"
-    SNAPSHOTS_TO_DELETE=$(curl -s ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}/_all | jq -r ".snapshots[:-${SNAPSHOT_RETENTION}][].snapshot")
-    
-    if [[ ! -z "${SNAPSHOTS_TO_DELETE}" ]]; then
-        for snapshot in ${SNAPSHOTS_TO_DELETE}; do
-            echo "Deleting snapshot ${snapshot}"
-            curl -s -X DELETE ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}/${snapshot}?pretty
-        done
-    fi
+  echo
+  echo "Deleting old snapshot(s)"
+  curator --config /etc/config/config.yml /etc/config/retention.yml
 fi
 
 echo
