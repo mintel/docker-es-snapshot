@@ -7,7 +7,7 @@ CLUSTER_URL=$(echo $CLUSTER_URL | sed "s/\/$//")
 
 # Set bucket name from file if file path is provided
 if [[ ! -z "${BUCKET_NAME_FILE_PATH}" ]]; then
-    BUCKET_NAME=$(cat $BUCKET_NAME_FILE_PATH)
+  BUCKET_NAME=$(cat $BUCKET_NAME_FILE_PATH)
 fi
 
 RESTORE_BYTES_PER_SEC=${RESTORE_BYTES_PER_SEC:-40mb}
@@ -21,14 +21,14 @@ echo
 echo "Creating snapshot repository"
 curl -s -X PUT ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}?pretty -H "Content-Type: application/json" -d'
 {
-    "type": "'${REPOSITORY_TYPE}'",
-    "settings": {
-        "bucket": "'${BUCKET_NAME}'",
-        "base_path": "'${SNAPSHOT_PATH}'",
-        "max_restore_bytes_per_sec": "'${RESTORE_BYTES_PER_SEC}'",
-        "max_snapshot_bytes_per_sec": "'${SNAPSHOT_BYTES_PER_SEC}'",
-        "readonly": '${READONLY}'
-    }
+  "type": "'${REPOSITORY_TYPE}'",
+  "settings": {
+    "bucket": "'${BUCKET_NAME}'",
+    "base_path": "'${SNAPSHOT_PATH}'",
+    "max_restore_bytes_per_sec": "'${RESTORE_BYTES_PER_SEC}'",
+    "max_snapshot_bytes_per_sec": "'${SNAPSHOT_BYTES_PER_SEC}'",
+    "readonly": '${READONLY}'
+  }
 }'
 
 if [[ -z "${SKIP_ACTIONS}" ]]; then
