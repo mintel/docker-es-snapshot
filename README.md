@@ -16,6 +16,10 @@ You need to provide the following environment variables:
 
 Optional environment variables:
 * `SNAPSHOT_RETENTION`: the number of past snapshots you want to keep (if this is set, previous snapshots will be deleted) (note that the `retention.yml` file mentioned above is required if this is set)
+* `RESTORE_BYTES_PER_SEC`: maximum throughput when restoring a snapshot, defaults to 40MB.
+* `SNAPSHOT_BYTES_PER_SEC`: maximum throughput when creating a snapshot, defaults to 40MB.
+* `READONLY`: whether the repository should be mounted read-only, defaults to false. Useful if you're only using this to restore a snapshot and don't want to overwrite existing snapshots.
+* `SKIP_ACTIONS`: set to true if you want to skip the main actions. Perhaps you only want to initialise the repository, or only cleanup old snapshots.
 
 ## TODO
 * Add support for non-bucket-based snapshots
