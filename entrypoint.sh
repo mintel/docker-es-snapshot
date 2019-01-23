@@ -31,9 +31,11 @@ curl -s -X PUT ${CLUSTER_URL}/_snapshot/${REPOSITORY_NAME}?pretty -H "Content-Ty
     }
 }'
 
-echo
-echo "Running actions"
-curator --config /etc/config/config.yml /etc/config/actions.yml
+if [[ -z "${SKIP_ACTIONS}" ]]; then
+  echo
+  echo "Running actions"
+  curator --config /etc/config/config.yml /etc/config/actions.yml
+fi
 
 if [[ ! -z "${SNAPSHOT_RETENTION}" ]]; then
   echo
